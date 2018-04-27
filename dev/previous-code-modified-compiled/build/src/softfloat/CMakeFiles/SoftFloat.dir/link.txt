@@ -1,0 +1,2 @@
+/Library/Developer/CommandLineTools/usr/bin/ar qc libSoftFloat.a  CMakeFiles/SoftFloat.dir/softfloat.c.o CMakeFiles/SoftFloat.dir/softfloat_decimal.c.o CMakeFiles/SoftFloat.dir/softfloat_fpsp.c.o
+/Library/Developer/CommandLineTools/usr/bin/ranlib libSoftFloat.a

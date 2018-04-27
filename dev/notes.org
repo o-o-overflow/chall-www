@@ -1,0 +1,3 @@
+* Things I did
+** Added sshd to /etc/rc.local (in config dir)
+** Added a redirect from localhost 42424 to guest 1000 (in previous-code/src/enet_slirp.c) to run my service

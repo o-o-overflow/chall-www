@@ -1,0 +1,2 @@
+/Library/Developer/CommandLineTools/usr/bin/ar qc libDimension.a  CMakeFiles/Dimension.dir/dimension.c.o CMakeFiles/Dimension.dir/nd_mem.c.o CMakeFiles/Dimension.dir/nd_nbic.c.o CMakeFiles/Dimension.dir/nd_devs.c.o CMakeFiles/Dimension.dir/nd_vio.c.o CMakeFiles/Dimension.dir/nd_rom.c.o CMakeFiles/Dimension.dir/i860.cpp.o CMakeFiles/Dimension.dir/i860dis.cpp.o CMakeFiles/Dimension.dir/nd_sdl.c.o
+/Library/Developer/CommandLineTools/usr/bin/ranlib libDimension.a

@@ -1,0 +1,6 @@
+# Hashes of file build rules.
+dfa2514e6b7820e2276051141c598ef7 python-ui/CMakeFiles/hatariui_man
+e902f8461b34c09e706a30eada5431c0 python-ui/hatariui.1.gz
+43390c97e26b9c0ea659327a6c7fabd1 src/CMakeFiles/osx_bundle_dirs
+5b289d4f1f21b17dcb1f4e9d358d9b25 src/cpu/cpudefs.c
+8961829a6464ed2c5194090ffe1634cc src/cpu/cpustbl.c

@@ -1,0 +1,2 @@
+/Library/Developer/CommandLineTools/usr/bin/ar qc libDebug.a  CMakeFiles/Debug.dir/68kDisass.c.o CMakeFiles/Debug.dir/log.c.o CMakeFiles/Debug.dir/debugui.c.o CMakeFiles/Debug.dir/breakcond.c.o CMakeFiles/Debug.dir/debugcpu.c.o CMakeFiles/Debug.dir/debugInfo.c.o CMakeFiles/Debug.dir/evaluate.c.o CMakeFiles/Debug.dir/profile.c.o CMakeFiles/Debug.dir/symbols.c.o
+/Library/Developer/CommandLineTools/usr/bin/ranlib libDebug.a

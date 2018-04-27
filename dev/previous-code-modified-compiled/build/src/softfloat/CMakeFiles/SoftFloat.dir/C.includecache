@@ -1,0 +1,46 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/adamd/src/old-web-chall/previous-code/src/softfloat/mamesf.h
+inttypes.h
+/Users/adamd/src/old-web-chall/previous-code/src/softfloat/inttypes.h
+
+/Users/adamd/src/old-web-chall/previous-code/src/softfloat/milieu.h
+mamesf.h
+/Users/adamd/src/old-web-chall/previous-code/src/softfloat/mamesf.h
+
+/Users/adamd/src/old-web-chall/previous-code/src/softfloat/softfloat-macros.h
+
+/Users/adamd/src/old-web-chall/previous-code/src/softfloat/softfloat-specialize.h
+
+/Users/adamd/src/old-web-chall/previous-code/src/softfloat/softfloat.c
+milieu.h
+/Users/adamd/src/old-web-chall/previous-code/src/softfloat/milieu.h
+softfloat.h
+/Users/adamd/src/old-web-chall/previous-code/src/softfloat/softfloat.h
+softfloat-specialize.h
+/Users/adamd/src/old-web-chall/previous-code/src/softfloat/softfloat-specialize.h
+
+/Users/adamd/src/old-web-chall/previous-code/src/softfloat/softfloat.h
+mamesf.h
+/Users/adamd/src/old-web-chall/previous-code/src/softfloat/mamesf.h
+softfloat-macros.h
+/Users/adamd/src/old-web-chall/previous-code/src/softfloat/softfloat-macros.h
+
+/Users/adamd/src/old-web-chall/previous-code/src/softfloat/softfloat_decimal.c
+softfloat.h
+/Users/adamd/src/old-web-chall/previous-code/src/softfloat/softfloat.h
+
+/Users/adamd/src/old-web-chall/previous-code/src/softfloat/softfloat_fpsp.c
+softfloat.h
+/Users/adamd/src/old-web-chall/previous-code/src/softfloat/softfloat.h
+softfloat_fpsp_tables.h
+/Users/adamd/src/old-web-chall/previous-code/src/softfloat/softfloat_fpsp_tables.h
+
+/Users/adamd/src/old-web-chall/previous-code/src/softfloat/softfloat_fpsp_tables.h
+

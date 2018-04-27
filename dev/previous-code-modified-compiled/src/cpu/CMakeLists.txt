@@ -1,0 +1,60 @@
+
+include_directories(. ../.. ../includes ${SDL2_INCLUDE_DIR}) 
+
+# Unfortunately we've got to specify the rules for the generated files twice,
+# once for cross compiling (with calling the host cc directly) and once
+# for native compiling so that the rules also work for non-Unix environments...
+if(CMAKE_CROSSCOMPILING)
+
+	add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/build68k
+		COMMAND cc ${CMAKE_CURRENT_SOURCE_DIR}/build68k.c
+		           -o ${CMAKE_CURRENT_BINARY_DIR}/build68k
+		DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/build68k.c)
+
+	add_custom_command(OUTPUT cpudefs.c
+		COMMAND ./build68k < ${CMAKE_CURRENT_SOURCE_DIR}/table68k >cpudefs.c
+		DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/table68k
+			${CMAKE_CURRENT_BINARY_DIR}/build68k)
+
+	add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gencpu
+		COMMAND cc -I${CMAKE_CURRENT_SOURCE_DIR}
+			   cpudefs.c ${CMAKE_CURRENT_SOURCE_DIR}/gencpu.c
+			   ${CMAKE_CURRENT_SOURCE_DIR}/readcpu.c
+			   -o ${CMAKE_CURRENT_BINARY_DIR}/gencpu
+		DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/gencpu.c
+			${CMAKE_CURRENT_SOURCE_DIR}/readcpu.c cpudefs.c)
+
+	add_custom_command(OUTPUT cpustbl.c 
+				cpuemu_31.c cpuemu_32.c
+		COMMAND ${CMAKE_CURRENT_BINARY_DIR}/gencpu
+		DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/gencpu)
+
+else()	# Rules for normal build follow
+
+	add_executable(build68k build68k.c)
+
+	add_custom_command(OUTPUT cpudefs.c
+		COMMAND $<TARGET_FILE:build68k> < ${CMAKE_CURRENT_SOURCE_DIR}/table68k >cpudefs.c
+		DEPENDS table68k build68k)
+
+	add_executable(gencpu gencpu.c readcpu.c cpudefs.c)
+
+	add_custom_command(OUTPUT cpustbl.c 
+				cpuemu_31.c cpuemu_32.c
+		COMMAND $<TARGET_FILE:gencpu>  DEPENDS gencpu)
+
+endif(CMAKE_CROSSCOMPILING)
+
+
+# Generated cpuemu.c contains a lot of warnings we don't really care about...
+if(CMAKE_COMPILER_IS_GNUCC)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-sign-compare -Wno-shadow")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-unused-variable -Wno-unused-label -Wno-unused-but-set-variable")
+endif(CMAKE_COMPILER_IS_GNUCC)
+
+add_library(UaeCpu
+#cpuemu_0.c cpuemu_11.c cpuemu_12.c cpuemu_20.c cpuemu_21.c 
+	cpuemu_31.c cpuemu_32.c
+	cpudefs.c cpummu.c cpummu030.c cpustbl.c cpuemu_common.c
+    	hatari-glue.c memory.c newcpu.c readcpu.c fpp.c
+	)

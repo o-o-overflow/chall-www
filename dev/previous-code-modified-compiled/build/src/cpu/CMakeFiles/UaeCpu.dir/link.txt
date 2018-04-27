@@ -1,0 +1,2 @@
+/Library/Developer/CommandLineTools/usr/bin/ar qc libUaeCpu.a  CMakeFiles/UaeCpu.dir/cpuemu_31.c.o CMakeFiles/UaeCpu.dir/cpuemu_32.c.o CMakeFiles/UaeCpu.dir/cpudefs.c.o CMakeFiles/UaeCpu.dir/cpummu.c.o CMakeFiles/UaeCpu.dir/cpummu030.c.o CMakeFiles/UaeCpu.dir/cpustbl.c.o CMakeFiles/UaeCpu.dir/cpuemu_common.c.o CMakeFiles/UaeCpu.dir/hatari-glue.c.o CMakeFiles/UaeCpu.dir/memory.c.o CMakeFiles/UaeCpu.dir/newcpu.c.o CMakeFiles/UaeCpu.dir/readcpu.c.o CMakeFiles/UaeCpu.dir/fpp.c.o
+/Library/Developer/CommandLineTools/usr/bin/ranlib libUaeCpu.a
