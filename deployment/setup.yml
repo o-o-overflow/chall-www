@@ -106,7 +106,7 @@
         state: directory
         mode: 0775
 
-    - name: copy previous to correct location
+    - name: copy previous config to correct location
       command: cp /opt/www/previous.cfg /home/www/.previous
 
   # Need to have a DNS server running so that cernvax.cern.cn resolves to anything (preferibly localhost)
