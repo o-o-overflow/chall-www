@@ -65,11 +65,12 @@ def test_images():
         crop.show()
 
 def send_screen_shot(img):
+    img = img.crop((0, 0, 1120, 830))
     img = img.convert('RGB')
     output = StringIO.StringIO()
     img.save(output, format="JPEG")
     contents = output.getvalue()
-    print base64.b64encode(contents)
+    print "DEBUG", base64.b64encode(contents)
     
         
 
@@ -124,12 +125,18 @@ def start_ns(url):
 
             print "Logged in"
 
+            current_image = v_display.waitgrab()
+            send_screen_shot(current_image)
+
             # Send the data
             send_url_to_ns(url)    
 
             send_copy_command(xdo, window)
 
             time.sleep(.50)
+
+            current_image = v_display.waitgrab()
+            send_screen_shot(current_image)
 
             print "Starting the old dog"
 
@@ -139,6 +146,10 @@ def start_ns(url):
             wait_until_www_ready(xdo, loc, window, v_display)
 
             print "That old dog is ready"
+
+            current_image = v_display.waitgrab()
+            send_screen_shot(current_image)
+            
 
             # Close out the terminal
             # Command-q is the keyboard shortcut to quit
@@ -150,12 +161,14 @@ def start_ns(url):
             print "Sending your input"
             wait_until_document_inspector_open(xdo, loc, window, v_display)
 
-            move_to_address_field(xdo, loc)
+            current_image = v_display.waitgrab()
+            send_screen_shot(current_image)
+            
+            move_to_address_field(xdo, loc, v_display)
             time.sleep(.50)
             xdo.click_window(window, 1)
 
             current_image = v_display.waitgrab()
-
             send_screen_shot(current_image)
 
             # Paste that shit!
@@ -174,15 +187,10 @@ def start_ns(url):
             print "tbl would be proud"
 
             # Wait for 5 seconds, taking screenshots
-            time.sleep(5)
-
-            current_image = v_display.waitgrab()
-            send_screen_shot(current_image)            
-            
-
-            # Kill everything and restart
-    # After everything is killed, send them the GIF
-    
+            for i in xrange(5):
+                time.sleep(1)
+                current_image = v_display.waitgrab()
+                send_screen_shot(current_image)            
 
     
 def log_into_ns(xdo, window):
@@ -216,7 +224,7 @@ def pixel_diff(first, second):
 def crop_to(img, target):
     return img.crop((target['start'][0], target['start'][1], target['start'][0] + target['size'][0], target['start'][1] + target['size'][0]))
 
-def wait_until_screen_matches(screen, v_display, threshold=1600):
+def wait_until_screen_matches(screen, v_display, percent_threshold=1):
     delay = 0.5
     done = False    
     target = image_info[screen]
@@ -228,14 +236,21 @@ def wait_until_screen_matches(screen, v_display, threshold=1600):
         time.sleep(delay)
         current_image = v_display.waitgrab()
         current_crop = crop_to(current_image, target)
-        diff = pixel_diff(good_crop, current_crop)
+        num_pixel_diff = pixel_diff(good_crop, current_crop)
+
+        width, height = current_crop.size
+
+        total_pixels = width * height * 1.0
+
+        diff = (num_pixel_diff / total_pixels) * 100.0
+        
         i += 1
         if i % 10 == 0:
-            send_screen_shot(current_image)            
+            send_screen_shot(current_image)
         if DEBUG:
-            print "current", screen, "pixel diff", diff
+            print "current", screen, "num pixel diff", num_pixel_diff, "percent pixel diff", diff
 
-        if diff < threshold:
+        if diff < percent_threshold:
             done = True
         
 def wait_until_login_screen(xdo, loc, window, v_display):
@@ -267,7 +282,7 @@ def select_open_document(xdo, loc, window):
     # I disabled the previous mode so NO KEYBOARD REQUIRED!
     xdo.send_keysequence_window(window, "Super_L+Shift+o")
 
-def move_to_address_field(xdo, loc):
+def move_to_address_field(xdo, loc, v_display):
     xdo.move_mouse(loc.x, loc.y)
     time.sleep(.50)
     target_x = 700
@@ -279,8 +294,15 @@ def move_to_address_field(xdo, loc):
     grad_x = 5
     grad_y = 5
 
+    i = 0
     done = False
     while not done:
+
+        i += 1
+        if i % 30 == 0:
+            current_image = v_display.waitgrab()
+            send_screen_shot(current_image)
+        
         if current_x + grad_x > target_x:
             to_move_x = target_x - current_x
         else:
@@ -348,13 +370,15 @@ def send_url_to_ns(url):
 
     to_send = struct.pack('>I', len(url)) + url
 
-    print repr(to_send)
+    if DEBUG:
+        print repr(to_send)
 
     s.sendall(to_send)
 
     result = s.recv(1024)
 
-    print result
+    if DEBUG:
+        print result
 
 
 def main():
@@ -364,6 +388,8 @@ def main():
     print "What URL would you like this old dog to fetch?"
     result = sys.stdin.readline()
 
+    result = result.rstrip('\n')
+    
     if not result.startswith("http://"):
         print "Error, I only know http"
         return
