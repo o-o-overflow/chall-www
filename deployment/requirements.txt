@@ -1,0 +1,6 @@
+python-xlib
+python-libxdo
+pyscreenshot
+Pillow
+PyVirtualDisplay
+easyprocess

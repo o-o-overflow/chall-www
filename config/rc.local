@@ -1,0 +1,38 @@
+#!/bin/sh -u
+#
+# This script is for augmenting the standard system startup commands. It is 
+# executed automatically by the system during boot up. 
+#
+# Copyright (C) 1993 by NeXT Computer, Inc.  All rights reserved.
+#
+# In its released form, this script does nothing. You may customize
+# it as you wish.
+#
+
+fbshow -B -I "Starting local services" -z 92
+
+# Read in configuration information
+. /etc/hostconfig
+
+# (echo -n 'local daemons:')					>/dev/console
+#
+# Run your own commands here
+#
+# (echo '.')							>/dev/console
+
+if [ -f /usr/local/sbin/prngd ]; then 
+	echo -n ' prngd' >/dev/console 
+	/usr/local/sbin/prngd /etc/egd-pool 
+fi 
+
+if [ -f /usr/local/sbin/sshd ]; then 
+	echo -n ' sshd ' >/dev/console 
+	/usr/local/sbin/sshd 
+fi
+
+# adamd: Super weird, but in order for sshd to accept connections in the previous emulator, we must make an outgoing connection
+# let's just try to curl example.com (DNS doesn't work yet, so let's leave this
+if [ -f /usr/local/bin/curl ]; then 
+	/usr/local/bin/curl --connect-timeout 5 http://example.com/
+fi
+

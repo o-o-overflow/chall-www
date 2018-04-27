@@ -1,0 +1,9 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/xenial64"
+  config.vm.network "forwarded_port", guest: 31337, host: 31337, host_ip: "127.0.0.1"
+  config.vm.define "www"
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "setup.yml"
+    ansible.become = true
+  end
+end

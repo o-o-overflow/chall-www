@@ -1,2 +1,5 @@
 *.pyc
 .DS_Store
+.vagrant
+setup.retry
+ubuntu-xenial-16.04-cloudimg-console.log

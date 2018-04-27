@@ -1,0 +1,123 @@
+---
+- hosts: all
+
+  # These next two are some tricks b/c some EC2 machines don't have python, the monsters
+  gather_facts: False
+  
+  pre_tasks:
+    - raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+      tags:
+        - always
+    - setup:
+  
+
+  tasks:
+
+    - name: Run the equivalent of "apt-get update" as a separate step
+      apt:
+        update_cache: yes
+      tags:
+        packages
+
+
+    - name: Update all packages to the latest version
+      apt:
+        upgrade: dist
+      tags:
+        packages
+
+    - name: install required packages
+      package: name={{ item }} state=latest update_cache=yes
+      with_items:
+        - byobu
+        - scrot
+        - python-dev
+        - python-pip
+        - libxdo-dev
+        - xvfb
+        - xserver-xephyr
+        - xinetd
+        - libsdl2-2.0-0
+        - libsdl2-dev
+        - libpng16-dev
+      tags:
+        packages
+
+    - name: create challenge folder
+      file:
+        path: "/opt/www"
+        owner: root
+        group: root
+        state: directory
+        mode: 0775
+
+    - name: copy required files
+      copy:
+        src: "./{{ item }}"
+        dest: /opt/www
+        mode: 0775
+        owner: root
+        group: root
+      with_items:
+        - frontend.py
+        - previous
+        - requirements.txt
+        - document_inspector_ready_good.png
+        - login_screen_good.png
+        - login_desktop_good.png
+        - www_ready_good.png
+        - previous.cfg
+        - Rev_1.2.BIN
+        - Rev_2.5_v66.BIN
+        - Rev_3.3_v74.BIN
+        
+    - name: install python2 requirements
+      pip:
+        requirements: /opt/www/requirements.txt
+
+    - name: install xinet.d config
+      copy:
+        src: www.config
+        dest: /etc/xinetd.d/www
+        owner: root
+        group: root
+        mode: 0664
+      notify:
+        - restart xinetd
+
+    - name: untar archive
+      unarchive:
+        src: NS33_2GB.dd.tar.gz
+        dest: /opt/www/
+        creates: /opt/www/NS33_2GB.dd
+        mode: 0775
+        owner: root
+        group: root
+
+    - name: create www user
+      user:
+        name: www
+
+    - name: create .previous directory
+      file:
+        path: "/home/www/.previous"
+        owner: www
+        group: www
+        state: directory
+        mode: 0775
+
+    - name: copy previous to correct location
+      command: cp /opt/www/previous.cfg /home/www/.previous
+
+  # Need to have a DNS server running so that cernvax.cern.cn resolves to anything (preferibly localhost)
+
+  handlers:
+    - name: restart xinetd
+      service: name=xinetd state=restarted
+
+
+
+
+
+
+      
