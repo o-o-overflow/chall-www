@@ -1,0 +1,10 @@
+id: "www" # this needs to be a single word, no spaces
+title: "www" # this is the title that will show up on the scoreboard
+description: "From such humble beginnigs does this web spring forth to entangle us all: can you take the next step?"
+public_files: [
+]
+tags: ["pwn"]
+author: "adamd"
+stateful: false # two consecutive connections go to the same VM
+to_deploy: true # this chall needs a VM to be deployed
+is_ready: fale # this chall is ready for prime time
