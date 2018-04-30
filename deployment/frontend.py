@@ -194,7 +194,14 @@ def start_ns(url):
             for i in xrange(5):
                 time.sleep(1)
                 current_image = v_display.waitgrab()
-                send_screen_shot(current_image)            
+                send_screen_shot(current_image)
+
+        # Crazy hack b/c something is sending an error message:
+        # "XIO:  fatal IO error 0 (Success) on X server ":1001""
+        # Which is freaking crazy, doesn't make any 
+        devnull = open(os.devnull, 'w')
+        os.dup2(devnull.fileno(), 2)
+
 
     
 def log_into_ns(xdo, window):
@@ -403,6 +410,7 @@ def main():
         return
     
     start_ns(result)
+    print "after"
 
 if __name__ == '__main__':
     main()
