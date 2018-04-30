@@ -18,7 +18,7 @@ import StringIO
 
 from xdo import Xdo
 
-DEBUG = True
+DEBUG = False
 
 ACTUAL_HARD_DISK = "/home/www/NS33_2GB.dd.current"
 PRISTINE_HARD_DISK = "/opt/www/NS33_2GB.dd"
@@ -66,9 +66,9 @@ def test_images():
 
 def send_screen_shot(img):
     img = img.crop((0, 0, 1120, 830))
-    img = img.convert('RGB')
+    #img = img.convert('RGB')
     output = StringIO.StringIO()
-    img.save(output, format="JPEG")
+    img.save(output, format="PNG")
     contents = output.getvalue()
     print "DEBUG", base64.b64encode(contents)
     
@@ -85,8 +85,9 @@ def start_ns(url):
         print "done creating the HD"
 
     with pyvirtualdisplay.smartdisplay.SmartDisplay(visible=0, size=(1300, 900)) as v_display:
-        print v_display
-        print v_display.display
+        if DEBUG:
+            print v_display
+            print v_display.display
 
         with easyprocess.EasyProcess(PREVIOUS_BINARY) as previous:
 
@@ -180,6 +181,9 @@ def start_ns(url):
             send_screen_shot(current_image)            
 
             print "That old dog can still visit URLs!"
+
+            # if DEBUG:
+            #     input("Wait for debugging")
 
             # Open it!
             xdo.send_keysequence_window(window, "Return")

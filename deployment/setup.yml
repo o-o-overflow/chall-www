@@ -109,11 +109,34 @@
     - name: copy previous config to correct location
       command: cp /opt/www/previous.cfg /home/www/.previous
 
-  # Need to have a DNS server running so that cernvax.cern.cn resolves to anything (preferibly localhost)
+    - name: add cernvax.cern.ch to /etc/hosts
+      lineinfile:
+        path: /etc/hosts
+        line: '127.0.0.1 cernvax.cern.ch'
+      notify:
+        - restart dnsmasq
+      
+    - name: install dnsmasq
+      package: name=dnsmasq state=latest update_cache=yes
+
+    - name: config dnsmasq
+      copy:
+        src: dnsmasq.conf
+        dest: /etc/dnsmasq.conf
+        owner: root
+        group: root
+        mode: 0644
+      notify:
+        - restart dnsmasq
+
 
   handlers:
     - name: restart xinetd
       service: name=xinetd state=restarted
+
+    - name: restart dnsmasq
+      service: name=dnsmasq state=restarted
+      
 
 
 
