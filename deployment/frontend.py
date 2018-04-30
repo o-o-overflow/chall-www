@@ -14,7 +14,7 @@ import PIL.ImageChops
 import PIL.ImageSequence
 import base64
 import StringIO
-
+import signal
 
 from xdo import Xdo
 
@@ -26,6 +26,8 @@ PRISTINE_HARD_DISK = "/opt/www/NS33_2GB.dd"
 HOME_DIR = "/opt/www/"
 
 PREVIOUS_BINARY = "/opt/www/previous"
+
+TIMEOUT_SECONDS = 300
 
 image_info = {'login_screen':
               {
@@ -391,8 +393,12 @@ def send_url_to_ns(url):
     if DEBUG:
         print result
 
+def handler(signum, frame):
+    raise Exception("Took too long, perhaps we got stuck in a loop. Oops.")
 
 def main():
+    signal.signal(signal.SIGALRM, handler)
+    signal.alarm(TIMEOUT_SECONDS)
     os.chdir(HOME_DIR)
     print "Welcome to the pre-alpha web aka 76fc400c68a0e2a33a164a86a1d37be3"
     print
