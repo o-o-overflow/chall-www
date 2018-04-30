@@ -7,4 +7,4 @@ tags: ["pwn"]
 author: "adamd"
 stateful: false # two consecutive connections go to the same VM
 to_deploy: true # this chall needs a VM to be deployed
-is_ready: fale # this chall is ready for prime time
+is_ready: true # this chall is ready for prime time
