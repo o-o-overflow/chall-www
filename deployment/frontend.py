@@ -16,6 +16,7 @@ import base64
 import StringIO
 import signal
 import tarfile
+import psutil
 
 from xdo import Xdo
 
@@ -92,6 +93,11 @@ def start_ns(url):
         if DEBUG:
             print v_display
             print v_display.display
+
+        # kill any previous binaries
+        for proc in psutil.process_iter():
+            if proc.name() == "previous":
+                proc.kill()
 
         with easyprocess.EasyProcess(PREVIOUS_BINARY) as previous:
 
