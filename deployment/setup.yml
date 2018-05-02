@@ -70,10 +70,19 @@
         - Rev_1.2.BIN
         - Rev_2.5_v66.BIN
         - Rev_3.3_v74.BIN
+        - NS33_2GB.dd.tar.gz
         
     - name: install python2 requirements
       pip:
         requirements: /opt/www/requirements.txt
+
+    - name: mount /dev/shm as 2.25 gigs
+      mount:
+        path: /dev/shm
+        opts: size=2304M
+        fstype: tmpfs
+        src: 'tmpfs'
+        state: mounted
 
     - name: install xinet.d config
       copy:
@@ -84,15 +93,6 @@
         mode: 0664
       notify:
         - restart xinetd
-
-    - name: untar archive
-      unarchive:
-        src: NS33_2GB.dd.tar.gz
-        dest: /opt/www/
-        creates: /opt/www/NS33_2GB.dd
-        mode: 0775
-        owner: root
-        group: root
 
     - name: create www user
       user:

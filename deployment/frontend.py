@@ -15,13 +15,14 @@ import PIL.ImageSequence
 import base64
 import StringIO
 import signal
+import tarfile
 
 from xdo import Xdo
 
 DEBUG = False
 
-ACTUAL_HARD_DISK = "/home/www/NS33_2GB.dd.current"
-PRISTINE_HARD_DISK = "/opt/www/NS33_2GB.dd"
+ACTUAL_HARD_DISK_DIR = "/dev/shm/"
+PRISTINE_HARD_DISK = "/opt/www/NS33_2GB.dd.tar.gz"
 
 HOME_DIR = "/opt/www/"
 
@@ -81,7 +82,8 @@ def start_ns(url):
     # First, create the copy of the hard drive
     if DEBUG:
         print "creating the HD"
-    shutil.copyfile(PRISTINE_HARD_DISK, ACTUAL_HARD_DISK)
+    tar = tarfile.open(PRISTINE_HARD_DISK, 'r:gz')
+    tar.extractall(ACTUAL_HARD_DISK_DIR)
 
     if DEBUG:
         print "done creating the HD"
@@ -118,6 +120,9 @@ def start_ns(url):
             wait_until_login_screen(xdo, loc, window, v_display)
 
             print "Finally booted"
+
+            current_image = v_display.waitgrab()
+            send_screen_shot(current_image)
 
             log_into_ns(xdo, window)
 
