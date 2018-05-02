@@ -1,0 +1,49 @@
+---
+- hosts: all
+
+  # These next two are some tricks b/c some EC2 machines don't have python, the monsters
+  gather_facts: False
+  
+  pre_tasks:
+    - raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+      tags:
+        - always
+    - setup:
+  
+
+  tasks:
+
+    - name: Run the equivalent of "apt-get update" as a separate step
+      apt:
+        update_cache: yes
+      tags:
+        packages
+
+
+    - name: Update all packages to the latest version
+      apt:
+        upgrade: dist
+      tags:
+        packages
+        
+    - name: install required packages
+      package: name={{ item }} state=latest update_cache=yes
+      with_items:
+        - byobu
+        - haproxy
+      tags:
+        packages
+
+    - name: setup haproxy config
+      copy:
+        src: haproxy.cfg
+        dest: /etc/haproxy/haproxy.cfg
+        owner: root
+        group: root
+        mode: 0644
+      notify:
+        - restart haproxy
+
+  handlers:
+    - name: restart haproxy
+      service: name=haproxy state=restarted

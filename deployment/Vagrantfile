@@ -1,13 +1,31 @@
 Vagrant.configure("2") do |config|
-  config.vm.box = "ubuntu/xenial64"
-  config.vm.network "forwarded_port", guest: 31337, host: 31337, host_ip: "127.0.0.1"
-  config.vm.define "www"
-  config.vm.provider "virtualbox" do |v|
-    v.memory = 3072
-    v.cpus = 2
+  
+  config.vm.define "www" do |www|
+    www.vm.box = "ubuntu/xenial64"
+    www.vm.define "www"
+    www.vm.hostname = 'www'
+    www.vm.network "private_network", ip: "10.0.0.2"
+    www.vm.provider "virtualbox" do |v|
+      v.memory = 3072
+      v.cpus = 2
+    end
+    www.vm.provision "ansible" do |ansible|
+      ansible.playbook = "setup-www.yml"
+      ansible.become = true
+    end
   end
-  config.vm.provision "ansible" do |ansible|
-    ansible.playbook = "setup.yml"
-    ansible.become = true
+
+  config.vm.define "lb" do |lb|
+    lb.vm.box = "ubuntu/xenial64"
+    lb.vm.network "forwarded_port", guest: 31337, host: 31337, host_ip: "127.0.0.1"
+
+    lb.vm.hostname = 'lb'
+    lb.vm.network "private_network", ip: "10.0.0.3"
+    
+    lb.vm.define "lb"
+    lb.vm.provision "ansible" do |ansible|
+      ansible.playbook = "setup-lb.yml"
+      ansible.become = true
+    end
   end
 end

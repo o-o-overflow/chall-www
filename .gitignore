@@ -1,6 +1,8 @@
 *.pyc
 .DS_Store
 .vagrant
+setup-lb.retry
+setup-www.retry
 setup.retry
 ubuntu-xenial-16.04-cloudimg-console.log
 dev/next-software
