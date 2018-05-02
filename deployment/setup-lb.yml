@@ -31,6 +31,7 @@
       with_items:
         - byobu
         - haproxy
+        - xinetd
       tags:
         packages
 
@@ -44,6 +45,56 @@
       notify:
         - restart haproxy
 
+    - name: create lb folder
+      file:
+        path: "/opt/lb"
+        owner: root
+        group: root
+        state: directory
+        mode: 0775
+
+
+    - name: create pow folder
+      file:
+        path: "/opt/pow"
+        owner: root
+        group: root
+        state: directory
+        mode: 0775
+
+    - name: copy pow
+      copy:
+        src: powserver.py
+        dest: /opt/pow/powserver.py
+        owner: root
+        group: root
+        mode: 0775
+
+    - name: copy lb-frontend
+      copy:
+        src: lb-frontend.sh
+        dest: /opt/lb/lb-frontend.sh
+        owner: root
+        group: root
+        mode: 0775
+
+    - name: install xinet.d config
+      copy:
+        src: lb-frontend.config
+        dest: /etc/xinetd.d/lb-frontend
+        owner: root
+        group: root
+        mode: 0664
+      notify:
+        - restart xinetd
+        
+        
+        
+
   handlers:
     - name: restart haproxy
       service: name=haproxy state=restarted
+
+    - name: restart xinetd
+      service: name=xinetd state=restarted
+      
