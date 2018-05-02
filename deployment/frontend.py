@@ -83,6 +83,12 @@ def start_ns(url):
     # First, create the copy of the hard drive
     if DEBUG:
         print "creating the HD"
+
+    # kill any previous binaries
+    for proc in psutil.process_iter():
+        if proc.name() == "previous":
+            proc.kill()
+        
     tar = tarfile.open(PRISTINE_HARD_DISK, 'r:gz')
     tar.extractall(ACTUAL_HARD_DISK_DIR)
 
@@ -93,11 +99,6 @@ def start_ns(url):
         if DEBUG:
             print v_display
             print v_display.display
-
-        # kill any previous binaries
-        for proc in psutil.process_iter():
-            if proc.name() == "previous":
-                proc.kill()
 
         with easyprocess.EasyProcess(PREVIOUS_BINARY) as previous:
 
