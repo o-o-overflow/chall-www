@@ -412,7 +412,7 @@ def main():
     signal.signal(signal.SIGALRM, handler)
     signal.alarm(TIMEOUT_SECONDS)
     os.chdir(HOME_DIR)
-    print "Welcome to the pre-alpha web aka 76fc400c68a0e2a33a164a86a1d37be3"
+    print "Welcome to the pre-alpha web aka 520d462abb92809b4fa1eaaafabbaee4"
     print
     print "What URL would you like this old dog to fetch?"
     result = sys.stdin.readline()
