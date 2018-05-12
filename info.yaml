@@ -1,6 +1,11 @@
 id: "www" # this needs to be a single word, no spaces
 title: "www" # this is the title that will show up on the scoreboard
-description: "From such humble beginnigs does this web spring forth to entangle us all: can you take the next step?"
+description: |
+  From such humble beginnings does this web spring forth to entangle us all: can you take the next step?
+
+  Flag format is nonstandard: `defconctf{ }`
+
+  ddee3e1a.quals2018.oooverflow.io:31337
 public_files: [
 ]
 tags: ["pwn"]
